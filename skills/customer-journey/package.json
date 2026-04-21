@@ -1,0 +1,13 @@
+{
+  "name": "customer-journey",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "journey": "node journey.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.50.0",
+    "yaml": "^2.7.0"
+  }
+}

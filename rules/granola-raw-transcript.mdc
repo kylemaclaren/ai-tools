@@ -1,0 +1,71 @@
+---
+description: Always use the raw Granola transcript, not the AI-generated summary
+alwaysApply: true
+---
+
+# Granola: use raw transcripts
+
+When summarizing, recapping, or posting back from a Granola meeting, **always work from the raw verbatim transcript**, not from any AI-generated summary or notes panel. This applies whether the source is the Granola MCP **or** a Markdown file synced locally by the `granola-sync` script.
+
+## Why
+- The AI summary compresses out nuance, direct quotes, tone, disagreements, and the actual flow of the conversation.
+- When the user asks for a meeting summary, recap, or post-back, they want it grounded in what was literally said — not a second-order synthesis of someone else's synthesis.
+
+---
+
+## Path A: When pulling from the Granola MCP
+
+- `get_meeting_transcript(meeting_id)` → **primary source of truth**. Always use this when summarizing a specific meeting.
+- `list_meetings` → use to find the meeting ID by title/date.
+- `get_meetings` → only use to get metadata (attendees, date). **Do not use its `<summary>` block as the basis for any recap or post.**
+- `query_granola_meetings` → acceptable for open-ended, cross-meeting questions where reading every transcript is impractical. Preserve citation links when used.
+
+### Workflow
+
+1. Use `list_meetings` to locate the meeting ID.
+2. Call `get_meeting_transcript` to get the verbatim content.
+3. Write the summary/post from the transcript.
+4. If Granola's `<summary>` was read earlier in the conversation, do not let it anchor your output — re-derive from the transcript.
+
+---
+
+## Path B: When reading a synced meeting file from `granola-sync`
+
+`granola-sync` writes one Markdown file per meeting (default to the user's configured output directory, e.g. `~/AI/meetings/`). Each file has this shape:
+
+```
+---
+id: ...
+title: ...
+date: YYYY-MM-DD
+attendees: ...
+---
+
+# <title>
+
+## Notes          ← only present if synced with --notes; mixes manual notes + Granola AI summary
+<...>
+
+## Transcript     ← always present; verbatim utterances
+<speaker timestamps and what they said>
+```
+
+Rules:
+
+- **Read the `## Transcript` section as your source of truth.** Quote from it, summarize from it, post-back from it.
+- **Treat `## Notes` like the MCP's `<summary>`** — useful for skimming a meeting's gist when picking which one to dig into, but never the basis for a recap or post. The notes panel mixes manual notes with Granola's AI output and there's no API-level way to separate them.
+- **YAML frontmatter is fine to use** for metadata (date, attendees, title) — same role as `get_meetings` in Path A.
+- If the file is missing a `## Transcript` section (e.g. an early meeting that wasn't transcribed), say so explicitly rather than falling back to `## Notes`. Offer to pull the transcript via the MCP instead.
+
+### Workflow
+
+1. Locate the relevant file by filename (`YYYY-MM-DD_<title>.md`) or by grepping the meetings directory.
+2. Read the file and use the `## Transcript` section.
+3. If `## Notes` was read earlier in the conversation, do not let it anchor your output — re-derive from `## Transcript`.
+
+---
+
+## Cross-cutting
+
+- If both paths are available (the file is synced locally **and** the MCP is configured), either is fine — they pull from the same source. Prefer the local file when it's already on disk (faster, no API call).
+- For broad cross-meeting questions where reading every transcript is impractical, `query_granola_meetings` (MCP) is acceptable. There's no equivalent shortcut for the local files — fall back to grep + read for the same job.

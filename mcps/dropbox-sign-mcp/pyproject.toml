@@ -1,0 +1,22 @@
+[project]
+name = "dropbox-sign-mcp"
+version = "0.1.0"
+description = "MCP server for drafting contracts and sending them for e-signature via Dropbox Sign"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]",
+    "dropbox-sign",
+    "fpdf2",
+    "pdfplumber",
+    "pymupdf",
+]
+
+[project.scripts]
+dropbox-sign-mcp = "server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"

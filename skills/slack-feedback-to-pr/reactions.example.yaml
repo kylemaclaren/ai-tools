@@ -1,0 +1,34 @@
+# Slack reaction conventions for slack-feedback-to-pr.
+#
+# All four sections are optional. If this file is missing, or any section is
+# omitted, the skill falls back to the defaults shown below.
+#
+# Reaction names are bare (no surrounding colons): use `white_check_mark`,
+# not `:white_check_mark:`. Custom emoji are supported — just use the emoji
+# name from your Slack workspace.
+#
+# Copy this file to `reactions.yaml` (in your repo root or alongside SKILL.md)
+# and edit to match your team's conventions.
+
+# Items with any of these reactions are dropped before classification — treat
+# them as already handled by someone on the team.
+skip:
+  - white_check_mark
+  - done
+
+# Items with any of these reactions get a heavy boost to signal_strength —
+# they ride toward the top of the ranked list regardless of reply count.
+promote:
+  - thumbsup
+  - heavy_plus_sign
+
+# Items with any of these reactions get a small penalty — someone's already
+# on it, no need to surface aggressively.
+deprioritize:
+  - eyes
+
+# Items with any of these reactions tilt borderline classifications toward
+# BUG (vs. FEATURE_REQUEST or SKIP). Useful when teammates triage manually
+# and want the AI to inherit their judgment.
+confirms_bug:
+  - bug

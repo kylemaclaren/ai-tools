@@ -1,0 +1,21 @@
+# Sidecar data for non-visual flows. Read by journey-extend.mjs and
+# rendered into placeholders the customer-journey skill reserved in
+# journey.yaml via `- extend: <key>` entries.
+#
+# One top-level key per extend slot. The shape is whatever your sidecar's
+# render function expects — customize freely. This template shows the
+# minimum the example render in journey-extend.template.mjs expects.
+
+example_flow:
+  # Optional. Shown as the section eyebrow above the row. Use this for
+  # sub-row slots (e.g., "1b — In her LLM"). Omit for peer-journey slots
+  # where the sidecar emits its own title card.
+  sub_label: "1b — In her LLM"
+
+  steps:
+    - content: "First panel content (plain text or inline HTML)."
+      caption: "What the user sees / does in this step, in third-person present tense."
+    - content: "Second panel content."
+      caption: "Next beat of the flow."
+    - content: "Third panel content."
+      caption: "Outcome / close."

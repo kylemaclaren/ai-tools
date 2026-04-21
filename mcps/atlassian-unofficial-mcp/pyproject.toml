@@ -1,0 +1,13 @@
+[project]
+name = "atlassian-unofficial"
+version = "0.2.0"
+description = "MCP server for Jira and Confluence Cloud — search, read, create, update, and comment directly from the LLM"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]",
+    "markdown>=3.4",
+]
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"

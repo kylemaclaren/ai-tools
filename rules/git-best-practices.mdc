@@ -1,0 +1,97 @@
+---
+description: Defensive git hygiene — never commit secrets, always branch, never push without asking
+alwaysApply: true
+---
+
+# Git: best practices
+
+This rule applies to **every git operation** you perform on the user's behalf. The user may be a PM, designer, or other non-engineer who is happy to delegate the mechanics but expects you to follow these defaults without being asked.
+
+## Why this matters
+
+Git is the user's "undo + share" system. Local mistakes are recoverable. Pushed mistakes are public — they can leak secrets, break teammates' branches, or rewrite history that other people depend on. Your job is to make the recoverable kind of mistake, never the public kind.
+
+---
+
+## Never commit secrets
+
+Treat as secret: `.env`, `*.env.local`, anything under `secrets/`, `*.key`, `*.pem`, API tokens, OAuth credentials, signing keys, database passwords, session cookies, `.npmrc`/`.pypirc` with auth, service-account JSON files, and anything that looks like a long opaque string the user pasted in.
+
+Rules:
+
+- **Ship a sensible `.gitignore` from day one** of any new project. At minimum: `.env`, `.env.local`, `*.key`, `*.pem`, `secrets/`, `node_modules/`, `__pycache__/`, `.DS_Store`. Don't wait for a leak to add one.
+- **Before staging any file, verify it doesn't contain secrets.** Files named `*.example` or `*.template` with placeholder values are fine. Files with real values are not.
+- **If a secret slipped into a commit (even a local one), rotate the secret immediately.** Don't just delete the file in a follow-up commit — assume it's already been read. Removing it from history doesn't recall any copy that's already been pulled.
+- **Never put secrets in commit messages, branch names, PR titles, or PR descriptions.** They get indexed and notified.
+
+---
+
+## Always work on a feature branch
+
+- **Never commit directly to `main` or `master`.** Cut a short, descriptive branch first (`fix/typo-in-readme`, `feat/add-user-search`, `kmiller/payment-form-cleanup` — match whatever convention the user/team already uses on the repo).
+- If you're in agent mode and discover you're on the default branch, **stop and create a branch before making changes**. Do not make changes first and figure out the branch later.
+- One branch per logical change. Don't pile unrelated work onto the same branch.
+
+---
+
+## Commit incrementally as you go
+
+- **Small, focused commits with clear messages** beat one giant "save everything" commit. They're easier to review, easier to revert, and easier to bisect when something breaks.
+- Don't wait until the work is "done" to commit. Commit at any natural checkpoint — a working step, a passing test, a finished section.
+- Local commits are free and reversible. Use them generously.
+
+---
+
+## Don't push without explicit confirmation
+
+- **Local commits are reversible. Pushed commits are public.** Always confirm with the user before `git push`, even on a feature branch they own.
+- Phrase it as a clear yes/no, not as an FYI. "Ready to push when you give the word" not "I'll push these now."
+- If the user says "commit" without saying "push," they mean commit only.
+
+---
+
+## Always open a PR rather than push to main
+
+- When you eventually do push, **open a PR** (`gh pr create` or equivalent) — even if the user has direct push permission to `main`. PRs give a reviewable surface, a clean rollback point, and a place for CI to run.
+- **Never push directly to `main`/`master`.** Not even for "trivial" fixes. The cost of opening a PR is tiny; the cost of a bad commit on `main` is large.
+- If the user explicitly asks you to push directly to the default branch, surface the trade-off ("this skips review and CI — are you sure?") before doing it.
+
+---
+
+## Never amend commits that have been pushed
+
+- `git commit --amend` rewrites history. Safe on local-only commits, dangerous on pushed ones.
+- Once a commit is on `origin`, **always create a new commit** for follow-up changes — never amend.
+- Exceptions are narrow: only amend if (a) the user explicitly asks, AND (b) you can confirm the commit hasn't been pulled by anyone else (rare for shared branches), AND (c) the user has accepted the force-push that will follow.
+
+---
+
+## Never force-push without explicit permission
+
+- **Never force-push to `main` or `master`** — full stop. Warn the user even if they ask.
+- On feature branches the user owns, only force-push when the user explicitly requests it ("force push," "rebase and update the PR," etc.).
+- Prefer `--force-with-lease` over `--force` when force-pushing — it refuses to clobber commits you don't know about.
+
+---
+
+## Write commit messages that explain intent
+
+- Lead with **what** changed and **why**, not **how**. Code already shows the how.
+- Bad: `fix`, `update`, `wip`, `changes`. Good: `Fix off-by-one in pagination causing last page to be skipped`.
+- For non-trivial commits, add a body paragraph explaining the reasoning, alternatives considered, or follow-up work needed.
+- Match the repo's existing commit style — check `git log` before writing your first commit on a new repo.
+
+---
+
+## Quick reference
+
+| Situation | Default action |
+|-----------|----------------|
+| About to add a file | Check for secrets first |
+| About to commit on `main`/`master` | Stop, cut a branch |
+| User said "commit" | Commit only, do not push |
+| User said "push" | Push to a feature branch and open a PR |
+| User said "push to main" | Surface the risk, then ask again |
+| Pushed commit needs a fix | New commit, never amend |
+| Asked to force-push | Only on a personal branch, only with explicit ask, prefer `--force-with-lease` |
+| About to write a commit message | Lead with what + why, never just "fix" |

@@ -1,0 +1,12 @@
+# Slack channels for slack-feedback-to-pr to monitor.
+# Just the channel names, one per line. The leading `#` is optional.
+#
+# The skill resolves names to IDs at the start of each run via the Slack MCP,
+# so the bot user must be a member of every channel listed here.
+#
+# Copy this file to `channels.yaml` (in your repo root or alongside SKILL.md)
+# and replace the examples below with your real channels.
+
+# - my-product-feedback
+# - design-partner-acme
+# - beta-feedback
