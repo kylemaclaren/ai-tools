@@ -8,7 +8,7 @@ PMs and engineers who work out of Jira and want their tickets available locally 
 
 ## What does it do?
 
-1. **Pull** — downloads Jira tickets as `.md` files into a local folder (e.g. `~/AI/jira/`)
+1. **Pull** — downloads Jira tickets as `.md` files into a local folder (e.g. `~/AI/tasks/`)
 2. **Create** — drafts tickets as local `.md` files, reviews them, then pushes to Jira
 3. **Update** — edits a synced ticket locally and pushes changes back to Jira
 4. **Comment** — adds a comment to a ticket from the terminal
@@ -71,7 +71,7 @@ Useful for having an LLM spec out tickets from a PRD, reviewing them locally, th
 
 ### 1. Write draft files
 
-Create `.md` files in `~/AI/jira/drafts/`. Use the same frontmatter format as synced tickets, with `key: NEW`:
+Create `.md` files in `~/AI/tasks/drafts/`. Use the same frontmatter format as synced tickets, with `key: NEW`:
 
 ```markdown
 ---
