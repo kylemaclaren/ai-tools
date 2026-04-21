@@ -46,8 +46,6 @@ Check if `journey.yaml` already exists in the project directory (look first in `
 
 1. **Ground the persona in evidence.** Read the prototype project's `AGENTS.md`, `README.md`, and any other docs to understand the product and its target user. If the workspace has an `org-context/` or `interviews/` folder, check for real customer/persona research to anchor on. If you find conflicting signals, surface them and ask the user which to prioritize. Never invent a persona from whole cloth when real user research is available.
 2. **Workshop the persona.** Propose a name, role, and a short description. Present in chat and iterate. Aim for a persona that would be recognizable to anyone in the ICP — specific role + specific responsibilities + the kind of day they actually have. Avoid generic "tech-forward professional" framings. Skip a separate "accountabilities" list: the JTBDs cover that ground, and a dedicated slide just repeats the same content twice.
-
-   Once the persona is locked, **pick an avatar**. The skill ships 62 bundled stock fake-user faces (`avatars/work/` + `avatars/personal/`, sourced from a design system tokens file). Open `<skill-dir>/avatars/index.html` in a browser to browse them, then set `persona.avatar:` in the manifest to the full name (e.g. `"Sara Letzinger"`). Real faces beat text-only persona slides — strangers retain a persona much better when it has a face attached. If none of the bundled options fit the persona (e.g. the product targets a specific demographic not represented in the set), drop a custom JPEG/PNG next to the manifest and reference it by relative path (e.g. `avatar: "./alex.jpg"`). Absolute paths also work.
 3. **Workshop the JTBDs (this is the one to get right).** JTBDs are what the persona is trying to accomplish in their life or work, independent of our product. Apply this quality bar before moving on:
 
    **Good JTBDs** (what execs actually respond to):
@@ -76,7 +74,7 @@ Check if `journey.yaml` already exists in the project directory (look first in `
 The manifest is the single source file. It defines everything:
 
 - **project**: name, date
-- **persona**: name, role, description, `avatar` (optional — a name from the bundled set, a relative path, or an absolute path; see [Persona avatars](#persona-avatars))
+- **persona**: name, role, description
 - **thesis** (optional): narrative bridge slide between persona and JTBDs. Object with `eyebrow`, `headline`, `subtitle`.
 - **jtbds**: numbered jobs-to-be-done. Three shapes supported:
   - Plain array of strings — uses default slide titles.
@@ -317,43 +315,6 @@ The `type: click` action accepts a few Playwright-style modifiers for desktop/na
 
 The click indicator (pink dot) follows the locator regardless of modifiers — so the dot for a right-click sits on the target row, and the next frame naturally shows the context menu.
 
-## Persona avatars
-
-A face on the persona slide makes the persona feel like a person, not a template. The skill ships 62 bundled stock fake-user avatars — the same kind of stock faces product designers use — so every deck can have one without anyone having to dig through Figma.
-
-**What's bundled** (256×256 JPEGs, ~1.5 MB total):
-
-- `avatars/work/` — 39 professional headshots (studio backdrops, office settings)
-- `avatars/personal/` — 23 casual portraits (home, outdoors, natural light)
-- `avatars/index.json` — machine-readable manifest mapping each name to its file
-- `avatars/index.html` — open this in a browser to browse and pick. Names render under each round thumbnail so you can copy one straight into the manifest.
-
-**Usage** — set one of these in the manifest:
-
-```yaml
-persona:
-  name: "Alex"
-  role: "Owner at Moonhelm Marketing"
-  avatar: "Sara Letzinger"       # name from the bundled set (case-insensitive)
-  # avatar: "./alex.jpg"         # relative path — looked up next to journey.yaml
-  # avatar: "/Users/me/alex.jpg" # absolute path
-  description: "..."
-```
-
-The resolver tries each in order:
-
-1. **Name lookup** in `avatars/index.json` — works for any of the 62 bundled names.
-2. **Path reference** — anything containing a `/` or a file extension is treated as a path and resolved against the manifest's directory (for project-specific custom avatars), or used as-is if absolute.
-3. **Unknown** — logs a warning and renders the slide without an avatar (never fails the build).
-
-The image is read at capture time, base64-encoded, and inlined into `journey.html` — the final deck stays self-contained. Published HTML files are still one-file shareable.
-
-**Adding a custom avatar**: drop a JPEG or PNG next to `journey.yaml` (e.g. `customer-journey/alex.jpg`), then reference it as `avatar: "./alex.jpg"`. Square crops look best (it renders in a 160px circle); anything off-square will be object-fit cropped to center.
-
-**Re-pulling the bundled set from Figma**: the asset URLs from the Figma MCP expire after 7 days, so the download script embeds fresh URLs only at the time it's run. If the avatars folder ever disappears or needs refreshing, open `avatars/.download.mjs` — the URLs at the top of that file are a snapshot; fetch new ones from the DIG Global/Tokens file (node `789:0`, frames `People/Work` at `38239:10386` and `People/Personal` at `38239:10511`) and re-run `node avatars/.download.mjs`. The script is idempotent and overwrites in place.
-
-**Handoff avatars in journey frames** (future): the same resolver will eventually power per-frame avatars — showing a different face when the persona hands work off to a client or teammate. Not wired yet; the avatar is currently persona-slide-only.
-
 ## Step recipes (keeping the manifest readable)
 
 For anything beyond the smallest demo, write step actions once in a `step_library:` section at the bottom of the manifest, then reference each one from the journey body with a `do:` shortcut. The journey body shrinks to a scannable list of `do:` + `caption:` pairs — what the user is doing and what the reader will see — and all the Playwright-flavored selectors stay below a clear "do not edit" boundary.
@@ -427,7 +388,6 @@ project:
 persona:
   name: "Jordan"
   role: "Media Producer"
-  avatar: "Becca Fiore"       # optional — name from the bundled set, or a relative/absolute path
   description: "Runs client-facing video projects at a mid-size agency."
 
 # Optional: narrative bridge slide between persona and JTBDs.

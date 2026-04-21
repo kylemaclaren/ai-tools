@@ -10,7 +10,7 @@ PMs and designers who have a working prototype and need to present the user expe
 
 A single `journey.html` file — open it locally, share it on Slack, email it, or publish it to a stable URL with the included [`publish.sh`](#sharing-with-a-stable-url) helper. Each journey includes:
 
-- Dark title slides with persona and JTBD framing — the persona slide can carry an avatar from the bundled 62-face set, so the persona feels like a person (not a template)
+- Dark title slides with persona and JTBD framing
 - Optional narrative slides — a "thesis" that frames the deck and a "recap" that closes it
 - Optional per-section "Part 1 / Part 2 / ..." eyebrows on journey titles
 - Horizontal-scroll screenshot rows grouped by journey
