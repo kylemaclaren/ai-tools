@@ -158,7 +158,7 @@ When your Atlassian token expires, ask your AI editor:
 
 The same `auth.py` helper handles rotation — it opens the token page, captures the new token via `getpass`, and updates `.env` in place. The token never enters chat, the same way first-time setup works.
 
-If you also use the [atlassian-unofficial-mcp](../../mcps/atlassian-unofficial-mcp/) (or `atlassian-internal-mcp` privately) with the same token, run that MCP's bundled `auth.py` separately — it writes to your editor's MCP config, not to `.env`.
+If you also use the [atlassian-internal-mcp](../../mcps/atlassian-internal-mcp/) with the same token, run that MCP's bundled `auth.py` separately — it writes to your editor's MCP config, not to `.env`.
 
 ---
 

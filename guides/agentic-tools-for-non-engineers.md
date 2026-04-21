@@ -406,3 +406,7 @@ If you want to get going today, pick your entry point based on what you want to 
 3. Send the prompt to a teammate. Two minutes later they're running.
 
 Everything else — MCP servers, sync scripts, scheduled automation — is an optimization you add when the basic workflow clicks.
+
+---
+
+Built by [Kyle Miller](https://www.linkedin.com/in/kylemaclaren/).

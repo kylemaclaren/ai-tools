@@ -435,3 +435,7 @@ After completing all selected items, present a summary table:
 |---|------|---------|--------|---------|--------|-------------|
 
 Include links to all created PRs. The `Slack draft` column inlines the drafted reply (or `skipped` if the user skipped Phase 5) so the user has everything in one place when they come back to post replies after merge.
+
+---
+
+Built by [Kyle Miller](https://www.linkedin.com/in/kylemaclaren/).

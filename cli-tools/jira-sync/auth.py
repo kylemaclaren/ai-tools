@@ -18,9 +18,9 @@ Optional flags:
     --first-time     Run the full first-time prompt sequence.
 
 This helper is intentionally separate from any MCP server's token rotation.
-If you also use the atlassian-unofficial-mcp (or atlassian-internal-mcp)
-and want a single token across both, run that MCP's bundled auth.py
-afterwards — it writes to your editor's MCP config, not to .env.
+If you also use the atlassian-internal-mcp and want a single token across
+both, run that MCP's bundled auth.py afterwards — it writes to your
+editor's MCP config, not to .env.
 """
 
 from __future__ import annotations
@@ -203,9 +203,9 @@ def main() -> None:
     print()
     print("Done. The next jira-sync invocation will use the new token.")
     print()
-    print("If you also use the atlassian-unofficial-mcp (or atlassian-internal-mcp)")
-    print("with the same Atlassian token, run that MCP's bundled auth.py too —")
-    print("it writes to your editor's MCP config, which is separate from .env.")
+    print("If you also use the atlassian-internal-mcp with the same Atlassian")
+    print("token, run that MCP's bundled auth.py too — it writes to your")
+    print("editor's MCP config, which is separate from .env.")
 
 
 if __name__ == "__main__":

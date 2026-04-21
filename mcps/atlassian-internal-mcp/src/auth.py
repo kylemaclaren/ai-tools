@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Set up or rotate the Atlassian API token for the atlassian-unofficial MCP server.
+"""Set up or rotate the Atlassian API token for the atlassian-internal MCP server.
 
 Captures the token in the terminal via getpass so it never appears in the LLM
 chat, transcript, or model context. Writes JIRA_BASE_URL, JIRA_EMAIL, and
@@ -7,11 +7,11 @@ JIRA_API_TOKEN directly to your editor's MCP config JSON, then asks you to
 restart the MCP server.
 
 Usage (rotation — token already known to the MCP server entry):
-    python3 src/auth.py --config ~/.cursor/mcp.json --server-name atlassian-unofficial
+    python3 src/auth.py --config ~/.cursor/mcp.json --server-name atlassian-internal
 
 Usage (first-time setup — also collects base URL + email and creates the entry
 if it does not already exist):
-    python3 src/auth.py --config ~/.cursor/mcp.json --server-name atlassian-unofficial --first-time
+    python3 src/auth.py --config ~/.cursor/mcp.json --server-name atlassian-internal --first-time
 
 The --config path must point at an MCP config file in the standard
 {"mcpServers": {<name>: {"env": {...}, ...}}} JSON shape (Cursor, Claude
@@ -122,7 +122,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
             "Securely set up or rotate the Atlassian API token for the "
-            "atlassian-unofficial MCP server. Token entry uses getpass so the "
+            "atlassian-internal MCP server. Token entry uses getpass so the "
             "value never enters the LLM chat or context."
         )
     )
@@ -133,8 +133,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--server-name",
-        default="atlassian-unofficial",
-        help="MCP server name in your config (default: atlassian-unofficial).",
+        default="atlassian-internal",
+        help="MCP server name in your config (default: atlassian-internal).",
     )
     parser.add_argument(
         "--first-time",

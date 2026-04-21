@@ -1,5 +1,5 @@
 """
-Atlassian Unofficial MCP Server
+Atlassian Internal MCP Server
 
 Exposes tools for Jira Cloud (search, read, create, update issues) and
 Confluence Cloud (fetch pages, comments, search, create/update pages)
@@ -29,7 +29,7 @@ _VERSION_FILE = Path(__file__).resolve().parent.parent / "VERSION"
 VERSION = _VERSION_FILE.read_text().strip() if _VERSION_FILE.exists() else "unknown"
 VERSION_URL = (
     "https://raw.githubusercontent.com/kylemaclaren/ai-tools/main"
-    "/mcps/atlassian-unofficial-mcp/VERSION"
+    "/mcps/atlassian-internal-mcp/VERSION"
 )
 
 _version_cache: dict = {}
@@ -54,14 +54,14 @@ def _version_warning() -> str:
     if latest != VERSION:
         return (
             f"\n\n---\n"
-            f"_atlassian-unofficial-mcp update available: you're on **v{VERSION}**, latest is **v{latest}**. "
-            f"Run `git pull` in your atlassian-unofficial-mcp directory to update._"
+            f"_atlassian-internal-mcp update available: you're on **v{VERSION}**, latest is **v{latest}**. "
+            f"Run `git pull` in your atlassian-internal-mcp directory to update._"
         )
     return ""
 
 
 mcp = FastMCP(
-    "Atlassian Unofficial",
+    "Atlassian Internal",
     instructions=(
         "Use this server to work with Jira Cloud issues and Confluence Cloud "
         "pages directly. All data comes from the Atlassian API in real-time "
@@ -139,8 +139,8 @@ def _handle_auth_error(http_code: int) -> None:
     raise JiraError(
         f"Your Atlassian API token has expired (HTTP {http_code}).\n\n"
         f"Ask your AI to rotate the token by running this MCP's bundled auth helper:\n"
-        f"  python3 <atlassian-unofficial-mcp-dir>/src/auth.py "
-        f"--config <your-mcp-config-path> --server-name atlassian-unofficial\n\n"
+        f"  python3 <atlassian-internal-mcp-dir>/src/auth.py "
+        f"--config <your-mcp-config-path> --server-name atlassian-internal\n\n"
         f"The helper opens {TOKEN_URL} in your browser, prompts for the new "
         f"token in the terminal (input is hidden — the token never enters "
         f"chat or the model context), and writes it directly to your MCP "

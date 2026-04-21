@@ -1,4 +1,4 @@
-# Atlassian Unofficial
+# Atlassian Internal
 
 Work with Jira tickets and Confluence pages directly from your AI editor's chat — no browser tab required.
 
@@ -8,14 +8,35 @@ An MCP server (a plugin that gives your AI editor new capabilities) for Jira Clo
 
 PMs and anyone who works in Jira and Confluence and wants to interact with tickets and pages without leaving their editor. Ask your AI "what's in the current sprint?" or "create a bug for the broken upload button" and it handles the Jira API calls for you.
 
+## How is this different from Atlassian's official Rovo MCP?
+
+Atlassian also ships a first-party MCP server — the [Atlassian Rovo MCP Server](https://support.atlassian.com/rovo/docs/getting-started-with-the-atlassian-remote-mcp-server/) — hosted at `https://mcp.atlassian.com/v1/mcp`. If you want broad coverage with vendor support and don't need anything custom, **start with Rovo**. It's free, hosted by Atlassian, uses OAuth 2.1, respects your Atlassian permissions, and writes audit logs your admin can review.
+
+This MCP is a small, opinionated, self-hosted alternative for cases where Rovo's surface area or behavior doesn't match how I want my agent to work:
+
+| | Atlassian Rovo MCP | This MCP |
+|---|---|---|
+| Hosted by | Atlassian (cloud) | You (local Python) |
+| Auth | OAuth 2.1 (preferred) or API token | API token (set via `auth.py` helper, never pasted into chat) |
+| Setup | Just-in-time install via 3LO consent | `pip install` + `auth.py --first-time` |
+| Coverage | Jira, Confluence, Compass | Jira, Confluence (no Compass) |
+| Compass | Yes | No |
+| Sprint awareness | General Jira tools | Dedicated `get_sprint_issues` (active sprint shortcut) |
+| Confluence comment replies | General page tools | Dedicated `reply_to_comment` + threaded `get_page_comments` workflow |
+| Write safety | Up to the client/user | Server-side `instructions` enforce a draft-confirm-send loop for writes and one-at-a-time comment replies |
+| Admin controls | IP allowlist, audit log, domain controls | None — runs on your machine |
+| Best fit | Most users; orgs with admin governance needs | PMs who want a focused, customizable workflow and are OK self-hosting |
+
+If you're undecided, start with Rovo. Pick this one if you want sprint-first ergonomics, the human-in-the-loop comment-reply workflow, or you just want something small you can fork and bend to your specific habits.
+
 ## Install
 
 Open your AI editor (Cursor, Claude Code, or Codex) and paste this prompt:
 
-> Install the **atlassian-unofficial-mcp** MCP server from `git@github.com:kylemaclaren/ai-tools.git` (sparse checkout `mcps/atlassian-unofficial-mcp`). Install its Python dependencies and add it to my editor's MCP config with the right `command` and `args` (leave the `env` block empty for now). Then run the bundled auth helper to capture my Atlassian credentials securely:
+> Install the **atlassian-internal-mcp** MCP server from `git@github.com:kylemaclaren/ai-tools.git` (sparse checkout `mcps/atlassian-internal-mcp`). Install its Python dependencies and add it to my editor's MCP config with the right `command` and `args` (leave the `env` block empty for now). Then run the bundled auth helper to capture my Atlassian credentials securely:
 >
 > ```
-> python3 <mcp-dir>/src/auth.py --config <path-to-my-mcp-config> --server-name atlassian-unofficial --first-time
+> python3 <mcp-dir>/src/auth.py --config <path-to-my-mcp-config> --server-name atlassian-internal --first-time
 > ```
 >
 > The helper opens the [Atlassian API token page](https://id.atlassian.com/manage-profile/security/api-tokens) in my browser, prompts for my base URL, email, and token in the terminal (token input is hidden — it never enters chat or the model context), and writes everything into the MCP config's `env` block. After it finishes, restart the MCP server.
