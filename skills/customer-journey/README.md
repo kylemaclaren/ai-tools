@@ -26,7 +26,7 @@ For a contract-signing prototype, the journey doc generates slides like:
 
 > **"Acme E-Sign"** — title slide with project name and date
 >
-> **"Alex is an Owner at Moonhelm Marketing."** — persona slide with her face in a round frame, her description, and what she's accountable for
+> **"Alex is an Owner at Moonhelm Marketing."** — persona slide with her description, and what she's accountable for
 >
 > **Jobs to be done** — send contracts in under five minutes, let AI handle field placement, track who's signed
 >
